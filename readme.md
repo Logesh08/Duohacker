@@ -47,8 +47,8 @@ docker compose up
 #### Environment Variables
 
 * `TOKEN` - Add your special token here
-* `ANOTHER_VAR` - More Description
-* `YOU_GET_THE_IDEA` - And another
+* `MAX_THREADS` - Maximum number of threads. Recommended value is 1 and Maximum value is 5. 
+* `RANGE_SET` - It's restarts each thread after specific number of loops. Default value is 50.
 
 ## Built With
 
