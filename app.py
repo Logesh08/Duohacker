@@ -13,10 +13,9 @@ from threading import Thread,current_thread
 from decouple import config
 
 
-MAX_THREADS = 1
-RANGE_SET = 50
-
-jwt_value = config('jwt_value')
+MAX_THREADS = config('MAX_THREADS')
+RANGE_SET = config('RANGE_SET')
+JWT_VALUE = config('JWT_VALUE')
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-infobars")
@@ -151,7 +150,7 @@ def getDriver():
 def getPractice(driver):
     try:
         driver.get("https://duolingo.com/")
-        driver.add_cookie({'domain':'.duolingo.com','name':'jwt_token','value': jwt_value ,'path':'/'})
+        driver.add_cookie({'domain':'.duolingo.com','name':'jwt_token','value': JWT_VALUE ,'path':'/'})
         driver.get("https://duolingo.com/practice")
         toogleGear(driver)
         return True
