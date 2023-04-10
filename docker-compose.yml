@@ -2,31 +2,31 @@ version: "3.9"
 
 services:
   bot1:
-    image: myapp
+    image: duohacker:latest
     mem_limit: 1500m
     restart: always
     networks:
       - duo_network
   bot2:
-    image: myapp
+    image: duohacker:latest
     mem_limit: 1500m
     restart: always
     networks:
       - duo_network
   bot3:
-    image: myapp
+    image: duohacker:latest
     mem_limit: 1500m
     restart: always
     networks:
       - duo_network
   bot4:
-    image: myapp
+    image: duohacker:latest
     mem_limit: 1500m
     restart: always
     networks:
       - duo_network
   bot5:
-    image: myapp
+    image: duohacker:latest
     mem_limit: 1500m
     restart: always
     networks:

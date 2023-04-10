@@ -13,8 +13,8 @@ from threading import Thread,current_thread
 from decouple import config
 
 
-MAX_THREADS = config('MAX_THREADS')
-RANGE_SET = config('RANGE_SET')
+MAX_THREADS = int(config('MAX_THREADS'))
+RANGE_SET = int(config('RANGE_SET'))
 JWT_VALUE = config('JWT_VALUE')
 
 chrome_options = Options()
