@@ -1,3 +1,4 @@
 selenium==4.8.3
 selenium-wire==5.1.0
 python-decouple==3.8
+firebase-admin==6.1.0

@@ -25,12 +25,17 @@ Open up your terminal and start cloning
 git clone https://github.com/Logesh08/Duohacker.git
 ```
 
+#### Building
+
+
 Start building the image
 
 ```shell
 cd Duohacker
 docker build -t Duohacker .
 ```
+
+#### Running
 
 Run in docker
 
@@ -47,14 +52,16 @@ docker compose up
 #### Environment Variables
 
 * `TOKEN` - Add your special token here
-* `MAX_THREADS` - Maximum number of threads. Recommended value is 1 and Maximum value is 5. 
-* `RANGE_SET` - It's restarts each thread after specific number of loops. Default value is 50.
+* `MAX_THREADS` - Maximum number of threads. Recommended value is 1 and Maximum value is 5
+* `RANGE_SET` - It's restarts each thread after specific number of loops. Default value is 50
+* `DB_REF` - Add your database reference here
 
 ## Built With
 
 * Selenium v4.8.3
 * Selenium Wire v5.1.0
 * Python Decouple v3.8
+* Firebase Admin v6.1.0
 
 ## Find Me
 

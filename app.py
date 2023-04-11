@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import gzip
 from threading import Thread,current_thread
 from decouple import config
+import firebase
 
 
 MAX_THREADS = int(config('MAX_THREADS'))
@@ -39,6 +40,7 @@ def getThreadId():
 def getAndAddTotalXp():
     global totalXP
     totalXP+=10
+    firebase.writeXp(10)
     return totalXP
 
 def getTotalXP():
@@ -48,6 +50,7 @@ def getTotalXP():
 def getTotalFixes():
     global totalFixes
     totalFixes+=1
+    firebase.writeFailed()
     return totalFixes  
 
 def toogleGear(driver):
@@ -218,4 +221,6 @@ def startThreadMonitor(threads):
 
 if __name__ == "__main__":
     namedThreads = [Thread(name="Duohacker") for i in range(MAX_THREADS)]
+    firebase.initialize_firebase()
+    firebase.disposePrevious()
     startThreadMonitor(namedThreads)

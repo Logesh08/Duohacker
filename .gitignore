@@ -1,2 +1,8 @@
 # Save your token here
 .env
+
+# Firebase key
+/secrects
+
+# Python cache
+/__pycache__
