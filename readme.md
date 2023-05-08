@@ -32,7 +32,7 @@ Start building the image
 
 ```shell
 cd Duohacker
-docker build -t Duohacker .
+docker build -t duohacker .
 ```
 
 #### Running
