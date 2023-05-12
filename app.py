@@ -82,7 +82,7 @@ def solve(driver,challanges):
                     if option.text==answer:
                         option.click()
                         options.remove(option)
-                        time.sleep(.1)
+                        time.sleep(.2)
                         break
         elif type == 'assist':
             answers = challange.get('choices')
@@ -93,7 +93,7 @@ def solve(driver,challanges):
             for option in options:
                 if option.text==answers[challange.get('correctIndex')]:
                     option.click()
-                    time.sleep(.1)
+                    time.sleep(.2)
                     break
         elif type == 'form':
             answers = challange.get('choices')
@@ -104,7 +104,7 @@ def solve(driver,challanges):
             for option in options:
                 if option.text==answers[challange.get('correctIndex')]:
                     option.click()
-                    time.sleep(.1)
+                    time.sleep(.2)
                     break
         elif type=='reverse_translate' or type == 'translate':
             answer = challange.get('correctSolutions')[0]
@@ -113,7 +113,7 @@ def solve(driver,challanges):
                     (By.CSS_SELECTOR, '[data-test="challenge-translate-input"]'))
             )
             text_area.send_keys(answer)
-            time.sleep(.1)
+            time.sleep(.2)
         else:
             print(type)
         next_btn = WebDriverWait(driver, 5).until(
@@ -178,11 +178,12 @@ def core():
                 session = json.loads(utf_8_data)
                 challanges = session.get('challenges')
                 if 'adaptiveChallenges' in session.keys():
+                    challanges_count = len(challanges)
                     try:
-                        challanges[15] = session.get('adaptiveChallenges')[1]
-                        challanges[14] = session.get('adaptiveChallenges')[0]
+                        challanges[challanges_count-1] = session.get('adaptiveChallenges')[1]
+                        challanges[challanges_count-2] = session.get('adaptiveChallenges')[0]
                     except:
-                        challanges[15] = session.get('adaptiveChallenges')[0]
+                        challanges[challanges_count-1] = session.get('adaptiveChallenges')[0]
                 break
         if not challanges:
             time.sleep(5)
