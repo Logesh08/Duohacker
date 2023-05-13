@@ -171,20 +171,24 @@ def core():
     challanges = None
     if not getPractice(driver): return
     for _ in range(RANGE_SET):
-        for request in driver.requests:
-            if request.response and request.url=='https://www.duolingo.com/2017-06-30/sessions':
-                decompressed_data = gzip.decompress(request.response.body)
-                utf_8_data = str(decompressed_data,'utf-8')
-                session = json.loads(utf_8_data)
-                challanges = session.get('challenges')
-                if 'adaptiveChallenges' in session.keys():
-                    challanges_count = len(challanges)
-                    try:
-                        challanges[challanges_count-1] = session.get('adaptiveChallenges')[1]
-                        challanges[challanges_count-2] = session.get('adaptiveChallenges')[0]
-                    except:
-                        challanges[challanges_count-1] = session.get('adaptiveChallenges')[0]
-                break
+        try:
+            for request in driver.requests:
+                if request.response and request.url=='https://www.duolingo.com/2017-06-30/sessions':
+                    decompressed_data = gzip.decompress(request.response.body)
+                    utf_8_data = str(decompressed_data,'utf-8')
+                    session = json.loads(utf_8_data)
+                    challanges = session.get('challenges')
+                    if 'adaptiveChallenges' in session.keys():
+                        challanges_count = len(challanges)
+                        try:
+                            challanges[challanges_count-1] = session.get('adaptiveChallenges')[1]
+                            challanges[challanges_count-2] = session.get('adaptiveChallenges')[0]
+                        except:
+                            challanges[challanges_count-1] = session.get('adaptiveChallenges')[0]
+                    break
+        except ValueError:
+            print("\033[91mRESTARTING CONTAINER\033[00m")
+            sys.exit(1)
         if not challanges:
             time.sleep(5)
         else:

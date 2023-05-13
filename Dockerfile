@@ -10,8 +10,6 @@ RUN apt-get install zip -y
 RUN apt-get install unzip -y
 
 
-
-
 # Install chromedriver
 RUN wget -N https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip -P ~/
 RUN unzip ~/chromedriver_linux64.zip -d ~/
