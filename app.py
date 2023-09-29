@@ -61,9 +61,9 @@ def toogleGear(driver):
     gear.click()
     switch = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located(
-            (By.CSS_SELECTOR, '.eP5n4.BLCtW'))
+            (By.CSS_SELECTOR, 'label[tabindex="0"] > input[type="checkbox"]'))
     )
-    switch.click()
+    driver.execute_script("arguments[0].click();",switch)
     done_button = driver.find_element(By.CSS_SELECTOR, '._3HhhB._2NolF._275sd._1ZefG._2zNWD')
     done_button.click()
 
@@ -75,7 +75,7 @@ def solve(driver,challanges):
             answers = challange.get('correctTokens')
             options = WebDriverWait(driver, 20).until(
                 EC.presence_of_all_elements_located(
-                    (By.CSS_SELECTOR, '[data-test="word-bank"] > div > button'))
+                    (By.CSS_SELECTOR, '[data-test="word-bank"] > div > span > button'))
             )
             for answer in answers:
                 for option in options:
@@ -88,7 +88,7 @@ def solve(driver,challanges):
             answers = challange.get('choices')
             options = WebDriverWait(driver, 20).until(
                 EC.presence_of_all_elements_located(
-                    (By.CSS_SELECTOR, 'div._1WbXO._9qT-e.MNYeE._2Nv1I > div > div'))
+                    (By.CSS_SELECTOR, 'div[aria-label="choice"][role="radiogroup"] > div > div'))
             )
             for option in options:
                 if option.text==answers[challange.get('correctIndex')]:

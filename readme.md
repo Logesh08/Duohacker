@@ -37,13 +37,13 @@ docker build -t duohacker .
 
 #### Running
 
-Run in docker
+Start a single container
 
 ```shell
-docker run Duohacker
+docker run --name bot1 --restart always --memory=1500m -e CONTAINER_NAME=bot1 duohacker:latest
 ```
 
-Start the containers
+Start all containers
 
 ```shell
 docker compose up
