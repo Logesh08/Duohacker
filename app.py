@@ -24,7 +24,7 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_argument("--mute-audio")
 chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--remote-debugging-port=9333")
 chrome_options.add_argument('--no-sandbox')
 
 chrome_options.add_argument("--disable-dev-shm-usage")
@@ -61,10 +61,10 @@ def toogleGear(driver):
     gear.click()
     switch = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located(
-            (By.CSS_SELECTOR, 'label[tabindex="0"] > input[type="checkbox"]'))
+            (By.CSS_SELECTOR, 'button[aria-pressed="true"]'))
     )
     driver.execute_script("arguments[0].click();",switch)
-    done_button = driver.find_element(By.CSS_SELECTOR, '._3HhhB._2NolF._275sd._1ZefG._2zNWD')
+    done_button = driver.find_element(By.CSS_SELECTOR, '#overlays > div:nth-child(6) > div > div > div > button')
     done_button.click()
 
 def solve(driver,challanges):
@@ -82,18 +82,18 @@ def solve(driver,challanges):
                     if option.text==answer:
                         option.click()
                         options.remove(option)
-                        time.sleep(.2)
+                        time.sleep(.3)
                         break
         elif type == 'assist':
             answers = challange.get('choices')
             options = WebDriverWait(driver, 20).until(
                 EC.presence_of_all_elements_located(
-                    (By.CSS_SELECTOR, 'div[aria-label="choice"][role="radiogroup"] > div > div'))
+                    (By.CSS_SELECTOR, '[data-test="challenge-choice"] > [data-test="challenge-judge-text"]'))
             )
             for option in options:
                 if option.text==answers[challange.get('correctIndex')]:
                     option.click()
-                    time.sleep(.2)
+                    time.sleep(.3)
                     break
         elif type == 'form':
             answers = challange.get('choices')
@@ -104,7 +104,7 @@ def solve(driver,challanges):
             for option in options:
                 if option.text==answers[challange.get('correctIndex')]:
                     option.click()
-                    time.sleep(.2)
+                    time.sleep(.3)
                     break
         elif type=='reverse_translate' or type == 'translate':
             answer = challange.get('correctSolutions')[0]
@@ -113,7 +113,7 @@ def solve(driver,challanges):
                     (By.CSS_SELECTOR, '[data-test="challenge-translate-input"]'))
             )
             text_area.send_keys(answer)
-            time.sleep(.2)
+            time.sleep(.3)
         else:
             print(type)
         next_btn = WebDriverWait(driver, 5).until(
@@ -148,6 +148,7 @@ def solve(driver,challanges):
 
 def getDriver():
     driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.set_window_size(1920,1092)
     return driver
 
 def getPractice(driver):
@@ -157,7 +158,7 @@ def getPractice(driver):
         driver.get("https://duolingo.com/practice")
         toogleGear(driver)
         return True
-    except:
+    except Exception as e:
         print("{}Page Not Loaded, Fixing...{}\033[00m".format(colors[getThreadId()],getTotalFixes()))
         try: 
             driver.close()

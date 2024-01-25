@@ -9,3 +9,5 @@
 
 # Local running
 *.sh
+venv/
+.vscode/
