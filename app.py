@@ -17,6 +17,7 @@ import firebase
 MAX_THREADS = int(config('MAX_THREADS'))
 RANGE_SET = int(config('RANGE_SET'))
 JWT_VALUE = config('TOKEN')
+session = "Global Scope for debugging"
 
 chrome_options = Options()
 chrome_options.add_argument("--disable-infobars")
@@ -24,7 +25,6 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_argument("--mute-audio")
 chrome_options.add_argument("--headless")
-chrome_options.add_argument("--remote-debugging-port=9333")
 chrome_options.add_argument('--no-sandbox')
 
 chrome_options.add_argument("--disable-dev-shm-usage")
@@ -77,6 +77,7 @@ def solve(driver,challanges):
                 EC.presence_of_all_elements_located(
                     (By.CSS_SELECTOR, '[data-test="word-bank"] > div > span > button'))
             )
+            time.sleep(1)
             for answer in answers:
                 for option in options:
                     if option.text==answer:
@@ -116,6 +117,8 @@ def solve(driver,challanges):
             time.sleep(.3)
         else:
             print(type)
+    
+        
         next_btn = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, '[aria-disabled="false"][data-test="player-next"]'))
@@ -177,6 +180,7 @@ def core():
                 if request.response and request.url=='https://www.duolingo.com/2017-06-30/sessions':
                     decompressed_data = gzip.decompress(request.response.body)
                     utf_8_data = str(decompressed_data,'utf-8')
+                    global session
                     session = json.loads(utf_8_data)
                     challanges = session.get('challenges')
                     if 'adaptiveChallenges' in session.keys():
