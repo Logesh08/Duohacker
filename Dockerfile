@@ -31,6 +31,6 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 ADD . /srv
 
-EXPOSE 9333
+# EXPOSE 9333
 
 CMD ["python", "-u", "app.py"]
