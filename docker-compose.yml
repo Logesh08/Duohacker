@@ -7,41 +7,41 @@ services:
     restart: always
     environment:
       - CONTAINER_NAME=bot1
-    networks:
-      - duo_network
+    # networks:
+    #   - duo_network
   bot2:
     image: duohacker:latest
     mem_limit: 1500m
     restart: always
     environment:
       - CONTAINER_NAME=bot2
-    networks:
-      - duo_network
+    # networks:
+    #   - duo_network
   bot3:
     image: duohacker:latest
     mem_limit: 1500m
     restart: always
     environment:
       - CONTAINER_NAME=bot3
-    networks:
-      - duo_network
+    # networks:
+    #   - duo_network
   bot4:
     image: duohacker:latest
     mem_limit: 1500m
     restart: always
     environment:
       - CONTAINER_NAME=bot4
-    networks:
-      - duo_network
+    # networks:
+    #   - duo_network
   bot5:
     image: duohacker:latest
     mem_limit: 1500m
     restart: always
     environment:
       - CONTAINER_NAME=bot5
-    networks:
-      - duo_network
+    # networks:
+    #   - duo_network
   
-networks:
-  duo_network:
-    driver: bridge
+# networks:
+#   duo_network:
+#     driver: bridge

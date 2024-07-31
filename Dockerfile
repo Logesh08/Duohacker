@@ -19,7 +19,7 @@ RUN apt-get -y install google-chrome-stable jq
 # Install chromedriver
 RUN driver_json_url="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" && \
     stable_version=$(curl -s $driver_json_url | jq -r '.channels.Stable.version') && \
-    wget -N "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$stable_version/linux64/chromedriver-linux64.zip" -P ~/
+    wget -N "https://storage.googleapis.com/chrome-for-testing-public/$stable_version/linux64/chromedriver-linux64.zip" -P ~/
 #RUN wget -N "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$(google-chrome-stable --version | awk '{print $3}')/linux64/chromedriver-linux64.zip" -P ~/
 RUN unzip ~/chromedriver-linux64.zip -d ~/
 RUN rm ~/chromedriver-linux64.zip
@@ -31,6 +31,6 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 ADD . /srv
 
-# EXPOSE 9333
+EXPOSE 9222
 
 CMD ["python", "-u", "app.py"]

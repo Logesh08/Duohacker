@@ -26,21 +26,25 @@ chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_argument("--mute-audio")
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
+# chrome_options.add_argument('--remote-debugging-port=9222')
+
 
 chrome_options.add_argument("--disable-dev-shm-usage")
 driver_path = '/usr/local/bin/chromedriver'
 
 service = ChromeService(executable_path=driver_path)
-colors = ["\033[91m","\033[92m","\033[95m","\033[96m","\033[93m"]
+colors = ["\033[95m","\033[91m","\033[92m","\033[96m","\033[93m"]
 totalXP = totalFixes = 0
 
 def getThreadId():
-    return 2
+    thread_name = current_thread().name
+    thread_id = int(thread_name.split('#')[1])
+    return thread_id%5
 
 def getAndAddTotalXp():
     global totalXP
-    totalXP+=10
-    firebase.writeXp(10)
+    totalXP+=5
+    firebase.writeXp(5)
     return totalXP
 
 def getTotalXP():
@@ -54,11 +58,12 @@ def getTotalFixes():
     return totalFixes  
 
 def toogleGear(driver):
+    # it's close button's selector we can target gear by using siblingElement
     gear = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located(
-            (By.CSS_SELECTOR, '._2l-C-._2kfEr._1nlVc._2fOC9.UCrz7.t5wFJ'))
+            (By.CSS_SELECTOR, '[data-test="quit-button"]'))
     )
-    gear.click()
+    driver.execute_script("arguments[0].nextElementSibling.click();",gear)
     switch = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located(
             (By.CSS_SELECTOR, 'button[aria-pressed="true"]'))
@@ -114,6 +119,18 @@ def solve(driver,challanges):
                     (By.CSS_SELECTOR, '[data-test="challenge-translate-input"]'))
             )
             text_area.send_keys(answer)
+            time.sleep(.3)
+        elif type=='gap_fill':
+            answer = challange.get('choices')[challange.get('correctIndex')]
+            options = WebDriverWait(driver, 20).until(
+                EC.presence_of_all_elements_located(
+                    (By.CSS_SELECTOR, 'div[role="radiogroup"][aria-label="choice"] > div > [data-test="challenge-judge-text"]'))
+            )
+            for option in options:
+                if option.text==answer:
+                    option.click()
+                    time.sleep(.3)
+                    break
             time.sleep(.3)
         else:
             print(type)
@@ -221,6 +238,7 @@ def startThreadMonitor(threads):
                     new_thread.start()
                     threads[i] = new_thread
                     del thread
+                    time.sleep(2) # To reduce simultaneous opening errors
             time.sleep(10)
         except KeyboardInterrupt:
             return
@@ -230,7 +248,7 @@ def startThreadMonitor(threads):
             
 
 if __name__ == "__main__":
-    namedThreads = [Thread(name="Duohacker") for i in range(MAX_THREADS)]
+    namedThreads = [Thread(name=f"Duohacker#{i}") for i in range(MAX_THREADS)]
     firebase.initialize_firebase()
     firebase.disposePrevious()
     startThreadMonitor(namedThreads)
