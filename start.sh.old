@@ -1,0 +1,8 @@
+logesh-17032@logesh-17032:~/old_backup/lk/duohacker$ docker run -d --name bot1 --restart always --memory=1500m -e CONTAINER_NAME=bot1 duohacker:latest && docker logs --follow bot1^C
+logesh-17032@logesh-17032:~/old_backup/lk/duohacker$ docker stop bot1 && docker rm bot1
+
+docker run --name bot1 --restart always --memory=1500m -e CONTAINER_NAME=bot1 duohacker:latest
+docker run --name bot1 --restart always --memory=1800m -e CONTAINER_NAME=bot1 -e TZ=$(cat /etc/timezone) duohacker:latest
+docker run --name bot1 --restart always --memory=1500m -e CONTAINER_NAME=bot1 -e TZ=$(cat /etc/timezone) -p 9222:9222 duohacker:latest
+docker build -t duohacker . --build-arg http_proxy=http://192.168.100.63:3128
+docker build -t duohacker . --no-cache --build-arg http_proxy=http://192.168.100.63:3128

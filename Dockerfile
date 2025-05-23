@@ -1,5 +1,4 @@
-FROM python:3
-
+FROM python:3.11-slim
 
 WORKDIR /srv
 
@@ -8,6 +7,8 @@ RUN apt-get -y update
 RUN pip install --upgrade pip
 RUN apt-get install zip -y
 RUN apt-get install unzip -y
+# Install on slim only
+RUN apt-get install -y curl gnupg 
 
 
 # Install chrome broswer

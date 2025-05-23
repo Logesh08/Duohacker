@@ -29,8 +29,37 @@ chrome_options.add_argument('--no-sandbox')
 # chrome_options.add_argument('--remote-debugging-port=9222')
 
 
-chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--disable-dev-shm-usage")     # avoid /dev/shm mount issues
 driver_path = '/usr/local/bin/chromedriver'
+
+# ─── extra “lightweight” flags ────────────────────────────────────────────
+
+# 1. Slash extra processes ↓
+# chrome_options.add_argument("--single-process") # Crashes threaded 
+chrome_options.add_argument("--no-zygote")
+chrome_options.add_argument("--disable-zygote")
+
+# 2. Turn off GPU & rendering tricks ↓
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--disable-software-rasterizer")
+chrome_options.add_argument("--disable-features=VizDisplayCompositor")
+
+# 3. Skip unneeded services ↓
+chrome_options.add_argument("--disable-extensions")
+chrome_options.add_argument("--disable-dev-shm-usage")         
+chrome_options.add_argument("--disable-background-timer-throttling")
+chrome_options.add_argument("--disable-backgrounding-occluded-windows")
+chrome_options.add_argument("--disable-breakpad")
+chrome_options.add_argument("--disable-client-side-phishing-detection")
+chrome_options.add_argument("--disable-default-apps")
+chrome_options.add_argument("--disable-sync")
+chrome_options.add_argument("--disable-translate")
+
+# 4. Shrink caching & logs ↓
+# chrome_options.add_argument("--disk-cache-size=0")
+# chrome_options.add_argument("--disable-cache")
+chrome_options.add_argument("--hide-scrollbars")
+chrome_options.add_argument("--log-level=3")
 
 service = ChromeService(executable_path=driver_path)
 colors = ["\033[95m","\033[91m","\033[92m","\033[96m","\033[93m"]
@@ -199,14 +228,19 @@ def core():
                     utf_8_data = str(decompressed_data,'utf-8')
                     global session
                     session = json.loads(utf_8_data)
-                    challanges = session.get('challenges')
+                    challanges = session.get('challenges', [])
                     if 'adaptiveChallenges' in session.keys():
+                        adaptive_challenges = session.get('adaptiveChallenges', [])
                         challanges_count = len(challanges)
-                        try:
-                            challanges[challanges_count-1] = session.get('adaptiveChallenges')[1]
-                            challanges[challanges_count-2] = session.get('adaptiveChallenges')[0]
-                        except:
-                            challanges[challanges_count-1] = session.get('adaptiveChallenges')[0]
+                        replace_count = min(len(adaptive_challenges), challanges_count)
+                        if replace_count > 0:
+                            # Replace the last `replace_count` elements in `challenges` with `adaptive_challenges`
+                            challanges[-replace_count:] = adaptive_challenges[:replace_count]
+                        # try:
+                        #     challanges[challanges_count-1] = session.get('adaptiveChallenges')[1]
+                        #     challanges[challanges_count-2] = session.get('adaptiveChallenges')[0]
+                        # except:
+                        #     challanges[challanges_count-1] = session.get('adaptiveChallenges')[0]
                     break
         except ValueError:
             print("\033[91mRESTARTING CONTAINER\033[00m")
