@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 import gzip
 from threading import Thread,current_thread
 from decouple import config
@@ -61,7 +62,8 @@ chrome_options.add_argument("--disable-translate")
 chrome_options.add_argument("--hide-scrollbars")
 chrome_options.add_argument("--log-level=3")
 
-service = ChromeService(executable_path=driver_path)
+# service = ChromeService(executable_path=driver_path)
+service = ChromeService(executable_path=ChromeDriverManager().install())
 colors = ["\033[95m","\033[91m","\033[92m","\033[96m","\033[93m"]
 totalXP = totalFixes = 0
 
@@ -223,7 +225,7 @@ def core():
     for _ in range(RANGE_SET):
         try:
             for request in driver.requests:
-                if request.response and request.url=='https://www.duolingo.com/2017-06-30/sessions':
+                if request.response and request.url=='https://www.duolingo.com/2023-05-23/sessions':
                     decompressed_data = gzip.decompress(request.response.body)
                     utf_8_data = str(decompressed_data,'utf-8')
                     global session
